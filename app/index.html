@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Werf Vault</title>
+</head>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css" rel="stylesheet">
+<style>
+    html,
+    body {
+        height: 100%;
+        width: 100%;
+    }
+
+    body {
+        background-color: #222;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    form {
+        width: 80%;
+        height: 80%;
+        padding: 10px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .form-control,
+    .form-control:focus {
+        background-color: #b1afaf;
+    }
+
+    textarea {
+        background-color: #b1afaf;
+        flex: 1;
+        margin-bottom: 10px;
+    }
+
+    #controls {
+        display: flex;
+        gap: 10px;
+    }
+
+    #encrypt {
+        flex: 1;
+    }
+</style>
+<script>
+    function generateText(length) {
+        var charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
+            retVal = "";
+        for (var i = 0, n = charset.length; i < length; ++i) {
+            retVal += charset.charAt(Math.floor(Math.random() * n));
+        }
+        return retVal;
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        document.querySelector('#copy').addEventListener('click', () => {
+            navigator.clipboard.writeText(document.querySelector('#text').value);
+        });
+
+        document.querySelector('#generate').addEventListener('click', () => {
+            document.querySelector('#text').value = generateText(16);
+        });
+    });
+</script>
+
+<body>
+    <form method="post" action="/" onsubmit="document.getElementsByTagName('textarea')[0].value = btoa(document.getElementsByTagName('textarea')[0].value); return true;">
+        <textarea id="text" class="form-control" placeholder="Введите переменную для шифрования"
+            name="secret">{{ .Data }}</textarea>
+        <div id="controls">
+            <button type="submit" id="encrypt" class="btn btn-primary">
+                <span class="bi bi-key"></span> Зашифровать
+            </button>
+            <button type="button" id="generate" class="btn btn-secondary">
+                <span class="bi bi-pencil"></span> Сгенерировать
+            </button>
+            <button type="button" id="copy" class="btn btn-secondary">
+                <span class="bi bi-clipboard"></span> Скопировать
+            </button>
+        </div>
+    </form>
+</body>
+
+</html>
